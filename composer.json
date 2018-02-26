@@ -3,9 +3,14 @@
     "description": "Yii2 gridview with full export of data to spreadsheet.",
     "type": "library",
     "require": {
-        "../vendor/phpoffice/phpspreadsheet": "^1.1",
-        "../vendor/yiisoft/yii2": "~2.0.12"
+        "phpoffice/phpspreadsheet": "^1.1",
+        "yiisoft/yii2": "~2.0.12"
     },
     "license": "MIT",
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "eseperio\\gridview\\": ""
+        }
+    }
 }
