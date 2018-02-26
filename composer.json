@@ -1,0 +1,11 @@
+{
+    "name": "eseperio/yii2-exportable-gridview",
+    "description": "Yii2 gridview with full export of data to spreadsheet.",
+    "type": "library",
+    "require": {
+        "../vendor/phpoffice/phpspreadsheet": "^1.1",
+        "../vendor/yiisoft/yii2": "~2.0.12"
+    },
+    "license": "MIT",
+    "minimum-stability": "dev"
+}
