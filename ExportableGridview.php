@@ -1,12 +1,13 @@
 <?php
 
-namespace eseperio\admintheme\widgets\grid;
+namespace eseperio\gridview;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Yii;
 use yii\base\UserException;
 use yii\grid\Column;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -64,8 +65,7 @@ class ExportableGridview extends \yii\grid\GridView
      */
     public $exportLinkOptions = [
         'class' => 'btn btn-default',
-        'data-pjax' => 0,
-        'target' => '_blank'
+        'target' => '_blank',
     ];
     /**
      * @var array columns to be exported. It empty gridview columns will be used.
@@ -281,9 +281,12 @@ class ExportableGridview extends \yii\grid\GridView
      */
     public function renderExportLink()
     {
+        $label = ArrayHelper::remove($this->exportLinkOptions, 'label', 'Export');
+        $encode = ArrayHelper::remove($this->exportLinkOptions, 'encode', true);
         $url = Url::current(['export-grid' => 1, 'export-container' => $this->options['id']]);
+        $this->exportLinkOptions['data-pjax'] = 0;
 
-        return Html::a('Export', $url, $this->exportLinkOptions);
+        return Html::a($encode ? Html::encode($label) : $label, $url, $this->exportLinkOptions);
     }
 
 
