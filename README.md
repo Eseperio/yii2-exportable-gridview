@@ -56,9 +56,27 @@ use eseperio\gridview\ExportableGridview as GridView;
 |`exportLinkOptions`|array| `['class'=> 'btn btn-default', 'target'=>'_blank']` |Options for the export link. It also accepts `label` and `encode`|
 |`exportColumns`|array|empty|Property to define a different column combination for export only. If empty default columns of gridview will be used|
 
+#### Constants available
+All writers identifiers are available through constants.
+
+
+| Constant name | Value|
+|---------------|------|
+|`WRITER_XLS`|Xls|
+|`WRITER_XLSX`|Xlsx|
+|`WRITER_ODS`|Ods|
+|`WRITER_CSV`|Csv|
+|`WRITER_HTML`|Html|
+|`WRITER_TCPDF`|Tcpdf|
+|`WRITER_DOMPDF`|Dompdf|
+|`WRITER_MPDF`|Mpdf|
+
+
 ### Notes
 All html tags are removed when exporting.
 
 ## Todo
 * [ ] Add option to exclude certain columns like ActionColumn.
+* [ ] Add batch data processing.
+* [ ] Add custom PDF export method.
 

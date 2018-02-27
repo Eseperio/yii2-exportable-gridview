@@ -19,6 +19,15 @@ class ExportableGridview extends \yii\grid\GridView
 {
 
     const DEFAULT_POINTER = 'A';
+
+    const WRITER_XLS = 'Xls';
+    const WRITER_XLSX = 'Xlsx';
+    const WRITER_ODS = 'Ods';
+    const WRITER_CSV = 'Csv';
+    const WRITER_HTML = 'Html';
+    const WRITER_TCPDF = 'Tcpdf';
+    const WRITER_DOMPDF = 'Dompdf';
+    const WRITER_MPDF = 'Mpdf';
     /**
      * @var string the layout that determines how different sections of the grid view should be organized.
      * The following tokens will be replaced with the corresponding section contents:
@@ -50,7 +59,6 @@ class ExportableGridview extends \yii\grid\GridView
      * @var string filename of the generated spreadsheet
      */
     public $fileName = 'exported.xls';
-
     /**
      * @var array Additional options for sending the file
      */
@@ -59,7 +67,6 @@ class ExportableGridview extends \yii\grid\GridView
      * @var bool whether the gridview can be exported.
      */
     public $exportable = true;
-
     /**
      * @var array options to use when rendering export link.
      */
@@ -71,7 +78,13 @@ class ExportableGridview extends \yii\grid\GridView
      * @var array columns to be exported. It empty gridview columns will be used.
      */
     public $exportColumns = [];
+    /**
+     * @var string spreadsheet column index
+     */
     private $columnIndex = self::DEFAULT_POINTER;
+    /**
+     * @var int spreadsheet row index
+     */
     private $rowIndex = 1;
     /**
      * @var array multidimensional containing rows and columns.
@@ -80,6 +93,9 @@ class ExportableGridview extends \yii\grid\GridView
      */
     private $data = [];
 
+    /**
+     * @var Spreadsheet generated
+     */
     private $_document;
 
     /**
