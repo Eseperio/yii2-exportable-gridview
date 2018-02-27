@@ -79,4 +79,5 @@ All html tags are removed when exporting.
 * [ ] Add option to exclude certain columns like ActionColumn.
 * [ ] Add batch data processing.
 * [ ] Add custom PDF export method.
+* [ ] Add tests
 
