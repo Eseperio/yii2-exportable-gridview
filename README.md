@@ -2,8 +2,8 @@
 Gridview with **full data export**
 
 This works as normal gridview, but adds a button to export the data loaded into it.
-It exports all records found on the active record query. It works with the same data
-as the gridview does. It uses [phpspreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
+It exports all records found on the active record query. Works with the same data
+as the gridview does. Uses [phpspreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
 to generate export file.
 
 ## How does it work
