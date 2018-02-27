@@ -104,6 +104,7 @@ class ExportableGridview extends \yii\grid\GridView
      */
     public function init()
     {
+
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
@@ -223,10 +224,8 @@ class ExportableGridview extends \yii\grid\GridView
     {
         foreach ($this->data as $rowKey => $row) {
             foreach ($row as $colKey => $column) {
-
-                $cleanValue = Html::encode(strip_tags(trim($column)));
+                $cleanValue = Html::encode(strip_tags(trim(str_replace('&nbsp;', "", $column))));
                 $this->data[$rowKey][$colKey] = $cleanValue;
-
             }
         }
     }
@@ -286,6 +285,7 @@ class ExportableGridview extends \yii\grid\GridView
      */
     public function renderSection($name)
     {
+
         if ($name === '{export}' && $this->exportable)
             return $this->renderExportLink();
 
