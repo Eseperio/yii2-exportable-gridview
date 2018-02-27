@@ -46,7 +46,6 @@ use eseperio\gridview\ExportableGridview as GridView;
 ```
 
 ### Additional configuration
-asd
 
 |Name|Type|default|Description|
 |----|----|-------|-----------|
