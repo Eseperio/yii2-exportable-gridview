@@ -7,7 +7,7 @@ as the gridview does. Uses [phpspreadsheet](https://github.com/PHPOffice/PhpSpre
 to generate export file.
 
 ## How does it work
-Following the same behavior that pjax uses, this widget act as a normal gridview until
+Following the same behavior that pjax widget, this widget act as a normal gridview until
 a request is made with the url query parameters `export-grid` and `export-container`.
 The latter should contain the id of gridview without the hashtag. When both parameters are received, response
 is cleared and then spreadsheet generation begins. This allow to generate a file with absolutely all
