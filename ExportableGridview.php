@@ -140,11 +140,12 @@ class ExportableGridview extends \yii\grid\GridView
      */
     public function run()
     {
-        if ($this->dataProvider->getCount() <= 0 || empty($this->columns))
-            throw new UserException('Nothing to export');
-
 
         if ($this->downloadRequested()) {
+
+            if ($this->dataProvider->getCount() <= 0 || empty($this->columns))
+                throw new UserException('Nothing to export');
+
             $response = Yii::$app->getResponse();
             $response->clearOutputBuffers();
             $response->setStatusCode(200);
