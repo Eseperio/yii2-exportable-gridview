@@ -117,8 +117,6 @@ class ExportableGridview extends \yii\grid\GridView
             $this->dataProvider->pagination = false;
 
         parent::init();
-
-
     }
 
     /**
