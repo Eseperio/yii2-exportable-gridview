@@ -113,11 +113,11 @@ class ExportableGridview extends \yii\grid\GridView
             $this->emptyCell = "";
             $this->columns = $this->exportColumns;
         }
+        if ($this->downloadRequested())
+            $this->dataProvider->pagination = false;
 
         parent::init();
 
-        if ($this->downloadRequested())
-            $this->dataProvider->getPagination()->pageSize = $this->dataProvider->getTotalCount();
 
     }
 
@@ -142,7 +142,6 @@ class ExportableGridview extends \yii\grid\GridView
     {
 
         if ($this->downloadRequested()) {
-
             if ($this->dataProvider->getCount() <= 0 || empty($this->columns))
                 throw new UserException('Nothing to export');
 
@@ -153,6 +152,7 @@ class ExportableGridview extends \yii\grid\GridView
             $document = $this->getDocument();
             $document->getActiveSheet()->fromArray($this->data);
             $this->prepareSend($this->exportFileOptions);
+            Yii::$app->response->send();
             Yii::$app->end();
 
         }
@@ -181,7 +181,6 @@ class ExportableGridview extends \yii\grid\GridView
 
     public function renderExportBody()
     {
-
         $models = array_values($this->dataProvider->getModels());
         $keys = $this->dataProvider->getKeys();
         $rows = [];
