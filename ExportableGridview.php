@@ -128,9 +128,6 @@ class ExportableGridview extends \yii\grid\GridView
 
         $grid = $request->get('export-grid');
         $container = $request->get('export-container');
-        echo "<pre>";
-        var_dump($container, $this->id,$this->getId(), Yii::$app->request->baseUrl, Yii::$app->request->pathInfo);
-        echo "</pre>";
 
         return $this->exportable && $grid && $container === $this->id;
     }
