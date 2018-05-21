@@ -105,7 +105,7 @@ class ExportableGridview extends \yii\grid\GridView
     public function init()
     {
 
-        if (!isset($this->options['id'])) {
+        if (!isset($this->id)) {
             $this->options['id'] = $this->getId();
         }
 
@@ -126,7 +126,13 @@ class ExportableGridview extends \yii\grid\GridView
     {
         $request = Yii::$app->getRequest();
 
-        return $this->exportable && $request->get('export-grid') && $request->get('export-container') === $this->options['id'];
+        $grid = $request->get('export-grid');
+        $container = $request->get('export-container');
+        echo "<pre>";
+        var_dump($container, $this->id,$this->getId(), Yii::$app->request->baseUrl, Yii::$app->request->pathInfo);
+        echo "</pre>";
+
+        return $this->exportable && $grid && $container === $this->id;
     }
 
     /**
@@ -297,7 +303,7 @@ class ExportableGridview extends \yii\grid\GridView
     {
         $label = ArrayHelper::remove($this->exportLinkOptions, 'label', 'Export');
         $encode = ArrayHelper::remove($this->exportLinkOptions, 'encode', true);
-        $url = Url::current(['export-grid' => 1, 'export-container' => $this->options['id']]);
+        $url = Url::current(['export-grid' => 1, 'export-container' => $this->getId()]);
         $this->exportLinkOptions['data-pjax'] = 0;
 
         return Html::a($encode ? Html::encode($label) : $label, $url, $this->exportLinkOptions);
