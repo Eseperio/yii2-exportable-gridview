@@ -122,7 +122,7 @@ class ExportableGridview extends \yii\grid\GridView
     /**
      * @return bool whether a download is allowed and requested.
      */
-    protected function downloadRequested()
+    public function downloadRequested()
     {
         $request = Yii::$app->getRequest();
 
