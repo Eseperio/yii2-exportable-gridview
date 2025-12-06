@@ -148,9 +148,13 @@ class ExportableGridview extends \yii\grid\GridView
 
             $response = Yii::$app->getResponse();
             
-            // Clean the current output buffer level to prevent HTML from being
-            // included in the export, but preserve any outer buffers (e.g., from
-            // testing frameworks) to maintain compatibility
+            // Clean output buffers to prevent HTML from being included in the export,
+            // but preserve the outermost buffer level to maintain compatibility with
+            // testing frameworks like Codeception. We clean down to level 1 (keeping
+            // the outermost buffer) then clean that buffer's content.
+            while (ob_get_level() > 1) {
+                ob_end_clean();
+            }
             if (ob_get_level() > 0) {
                 ob_clean();
             }
