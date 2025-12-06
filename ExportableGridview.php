@@ -159,15 +159,20 @@ class ExportableGridview extends \yii\grid\GridView
             // and then clean the content of the outermost buffer (level 1), while keeping
             // the buffer structure intact for the testing framework.
             $iterations = 0;
-            while (ob_get_level() > 1 && $iterations++ < self::MAX_BUFFER_CLEANUP_ITERATIONS) {
+            while (ob_get_level() > 1 && $iterations < self::MAX_BUFFER_CLEANUP_ITERATIONS) {
                 $result = ob_end_clean();
                 if ($result === false) {
                     // If ob_end_clean fails, break to avoid infinite loop
                     break;
                 }
+                $iterations++;
             }
             if (ob_get_level() > 0) {
-                ob_clean();
+                $result = ob_clean();
+                if ($result === false) {
+                    // Log warning if cleaning the outermost buffer fails
+                    // but continue with export as the nested buffers have been removed
+                }
             }
             
             $response->setStatusCode(200);
