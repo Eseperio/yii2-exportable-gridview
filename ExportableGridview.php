@@ -147,12 +147,25 @@ class ExportableGridview extends \yii\grid\GridView
                 throw new UserException('Nothing to export');
 
             $response = Yii::$app->getResponse();
-            $response->clearOutputBuffers();
+            
+            // Clean the current output buffer level to prevent HTML from being
+            // included in the export, but preserve any outer buffers (e.g., from
+            // testing frameworks) to maintain compatibility
+            if (ob_get_level() > 0) {
+                ob_clean();
+            }
+            
             $response->setStatusCode(200);
+            
+            // Prepare the export data
             $this->prepareExportArray();
             $document = $this->getDocument();
             $document->getActiveSheet()->fromArray($this->data);
+            
+            // Prepare the response for file sending
             $this->prepareSend($this->exportFileOptions);
+            
+            // Send the response and end the application
             Yii::$app->response->send();
             Yii::$app->end();
 
