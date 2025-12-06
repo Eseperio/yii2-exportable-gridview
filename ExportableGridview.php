@@ -150,10 +150,16 @@ class ExportableGridview extends \yii\grid\GridView
             
             // Clean output buffers to prevent HTML from being included in the export,
             // but preserve the outermost buffer level to maintain compatibility with
-            // testing frameworks like Codeception. We clean down to level 1 (keeping
-            // the outermost buffer) then clean that buffer's content.
-            while (ob_get_level() > 1) {
-                ob_end_clean();
+            // testing frameworks like Codeception. We remove all nested buffers (level 2+)
+            // and then clean the content of the outermost buffer (level 1), while keeping
+            // the buffer structure intact for the testing framework.
+            $maxIterations = 100; // Safety limit to prevent infinite loops
+            $iterations = 0;
+            while (ob_get_level() > 1 && $iterations++ < $maxIterations) {
+                if (!@ob_end_clean()) {
+                    // If ob_end_clean fails, break to avoid infinite loop
+                    break;
+                }
             }
             if (ob_get_level() > 0) {
                 ob_clean();
