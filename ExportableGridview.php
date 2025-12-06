@@ -28,6 +28,11 @@ class ExportableGridview extends \yii\grid\GridView
     const WRITER_TCPDF = 'Tcpdf';
     const WRITER_DOMPDF = 'Dompdf';
     const WRITER_MPDF = 'Mpdf';
+    
+    /**
+     * Maximum iterations for cleaning output buffers to prevent infinite loops
+     */
+    const MAX_BUFFER_CLEANUP_ITERATIONS = 100;
     /**
      * @var string the layout that determines how different sections of the grid view should be organized.
      * The following tokens will be replaced with the corresponding section contents:
@@ -153,10 +158,10 @@ class ExportableGridview extends \yii\grid\GridView
             // testing frameworks like Codeception. We remove all nested buffers (level 2+)
             // and then clean the content of the outermost buffer (level 1), while keeping
             // the buffer structure intact for the testing framework.
-            $maxIterations = 100; // Safety limit to prevent infinite loops
             $iterations = 0;
-            while (ob_get_level() > 1 && $iterations++ < $maxIterations) {
-                if (!@ob_end_clean()) {
+            while (ob_get_level() > 1 && $iterations++ < self::MAX_BUFFER_CLEANUP_ITERATIONS) {
+                $result = ob_end_clean();
+                if ($result === false) {
                     // If ob_end_clean fails, break to avoid infinite loop
                     break;
                 }
