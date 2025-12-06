@@ -167,11 +167,18 @@ class ExportableGridview extends \yii\grid\GridView
                 }
                 $iterations++;
             }
+            
+            // Log a warning if we hit the iteration limit, which might indicate an issue
+            if ($iterations >= self::MAX_BUFFER_CLEANUP_ITERATIONS && ob_get_level() > 1) {
+                Yii::warning('Reached maximum buffer cleanup iterations. Buffer level: ' . ob_get_level(), __METHOD__);
+            }
+            
             if (ob_get_level() > 0) {
                 $result = ob_clean();
                 if ($result === false) {
-                    // Log warning if cleaning the outermost buffer fails
-                    // but continue with export as the nested buffers have been removed
+                    // Buffer cleaning failed, but we continue with export as nested buffers 
+                    // have been removed. This is non-critical as the file content is prepared separately.
+                    Yii::warning('Failed to clean outermost output buffer', __METHOD__);
                 }
             }
             
