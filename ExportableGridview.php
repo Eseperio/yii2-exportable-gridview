@@ -160,12 +160,12 @@ class ExportableGridview extends \yii\grid\GridView
             // the buffer structure intact for the testing framework.
             $iterations = 0;
             while (ob_get_level() > 1 && $iterations < self::MAX_BUFFER_CLEANUP_ITERATIONS) {
+                $iterations++;
                 $result = ob_end_clean();
                 if ($result === false) {
                     // If ob_end_clean fails, break to avoid infinite loop
                     break;
                 }
-                $iterations++;
             }
             
             // Log a warning if we hit the iteration limit, which might indicate an issue
