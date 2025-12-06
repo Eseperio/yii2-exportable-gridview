@@ -164,7 +164,7 @@ class ExportableGridview extends \yii\grid\GridView
                 $iterations++;
                 if ($result === false) {
                     // If ob_end_clean fails, log and break to avoid infinite loop
-                    Yii::warning('ob_end_clean() failed after ' . $iterations . ' iterations. Buffer level: ' . ob_get_level(), __METHOD__);
+                    Yii::warning('ob_end_clean() failed on iteration ' . $iterations . '. Buffer level: ' . ob_get_level(), __METHOD__);
                     break;
                 }
             }
