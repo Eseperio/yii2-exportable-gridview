@@ -28,6 +28,11 @@ class ExportableGridview extends \yii\grid\GridView
     const WRITER_TCPDF = 'Tcpdf';
     const WRITER_DOMPDF = 'Dompdf';
     const WRITER_MPDF = 'Mpdf';
+    
+    /**
+     * Maximum iterations for cleaning output buffers to prevent infinite loops
+     */
+    const MAX_BUFFER_CLEANUP_ITERATIONS = 100;
     /**
      * @var string the layout that determines how different sections of the grid view should be organized.
      * The following tokens will be replaced with the corresponding section contents:
@@ -147,12 +152,48 @@ class ExportableGridview extends \yii\grid\GridView
                 throw new UserException('Nothing to export');
 
             $response = Yii::$app->getResponse();
-            $response->clearOutputBuffers();
+            
+            // Clean output buffers to prevent HTML from being included in the export,
+            // but preserve the outermost buffer level to maintain compatibility with
+            // testing frameworks like Codeception. We remove all nested buffers (level 2+)
+            // and then clean the content of the outermost buffer (level 1), while keeping
+            // the buffer structure intact for the testing framework.
+            $iterations = 0;
+            while (ob_get_level() > 1 && $iterations < self::MAX_BUFFER_CLEANUP_ITERATIONS) {
+                $result = ob_end_clean();
+                $iterations++;
+                if ($result === false) {
+                    // If ob_end_clean fails, log and break to avoid infinite loop
+                    Yii::warning('ob_end_clean() failed on iteration ' . $iterations . '. Buffer level: ' . ob_get_level(), __METHOD__);
+                    break;
+                }
+            }
+            
+            // Log a warning if we hit the iteration limit, which might indicate an issue
+            if ($iterations === self::MAX_BUFFER_CLEANUP_ITERATIONS && ob_get_level() > 1) {
+                Yii::warning('Reached maximum buffer cleanup iterations (' . self::MAX_BUFFER_CLEANUP_ITERATIONS . '). Buffer level: ' . ob_get_level(), __METHOD__);
+            }
+            
+            if (ob_get_level() > 0) {
+                $result = ob_clean();
+                if ($result === false) {
+                    // Buffer cleaning failed, but we continue with export as nested buffers 
+                    // have been removed. This is non-critical as the file content is prepared separately.
+                    Yii::warning('Failed to clean outermost output buffer', __METHOD__);
+                }
+            }
+            
             $response->setStatusCode(200);
+            
+            // Prepare the export data
             $this->prepareExportArray();
             $document = $this->getDocument();
             $document->getActiveSheet()->fromArray($this->data);
+            
+            // Prepare the response for file sending
             $this->prepareSend($this->exportFileOptions);
+            
+            // Send the response and end the application
             Yii::$app->response->send();
             Yii::$app->end();
 
