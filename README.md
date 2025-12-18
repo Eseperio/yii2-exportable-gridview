@@ -71,6 +71,9 @@ All writers identifiers are available through constants.
 |`WRITER_DOMPDF`|Dompdf|
 |`WRITER_MPDF`|Mpdf|
 
+### Known issues
+
+- There is a known issue with codeception functional tests where testing export may break other tests if output buffer is not enabled in php. 
 
 ### Notes
 All html tags are removed when exporting.
